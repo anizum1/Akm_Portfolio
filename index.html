@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kali Linux - AkmOS Desktop</title>
+    <title>Akm Nizum — Security Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
@@ -125,6 +125,14 @@
             font-size: 0.85rem;
             color: #888;
             margin-top: 0.3rem;
+        }
+
+        .login-welcome {
+            font-size: 0.9rem;
+            color: #00ff41;
+            margin-top: 1.2rem;
+            text-align: center;
+            opacity: 0.85;
         }
 
         .login-btn {
@@ -410,6 +418,70 @@
 
         .window.active {
             display: flex;
+            animation: winOpen 0.4s cubic-bezier(0.2, 0.8, 0.25, 1);
+        }
+
+        @keyframes winOpen {
+            from { opacity: 0; transform: translate(-50%, -50%) perspective(1500px) rotateX(-16deg) translateZ(-180px) scale(0.94); }
+            to   { opacity: 1; transform: translate(-50%, -50%) perspective(1500px) rotateX(0deg) translateZ(0) scale(1); }
+        }
+
+        /* ===== 3D depth & tilt ===== */
+        #bg3d {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.9;
+        }
+        #desktop {
+            perspective: 1600px;
+        }
+        .desktop-content {
+            transform-style: preserve-3d;
+            transition: transform 0.25s ease-out;
+        }
+        .desktop-icon {
+            transform-style: preserve-3d;
+            will-change: transform;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+        }
+        .desktop-icon:hover {
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55), 0 0 22px rgba(0, 255, 65, 0.25);
+        }
+        .desktop-icon .icon-image {
+            transition: transform 0.25s ease-out;
+            transform: translateZ(30px);
+        }
+        .desktop-icon .icon-label {
+            transform: translateZ(18px);
+        }
+        .window {
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 50px rgba(0, 255, 65, 0.3);
+        }
+        /* Glassy 3D taskbar & top bar */
+        .task-bar {
+            background: linear-gradient(180deg, rgba(8, 16, 30, 0.85), rgba(0, 0, 0, 0.95));
+            backdrop-filter: blur(14px);
+            box-shadow: inset 0 1px 0 rgba(0, 255, 65, 0.25), 0 -8px 24px rgba(0, 0, 0, 0.5);
+        }
+        .task-item {
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        .top-bar {
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #bg3d { display: none; }
+            .window.active { animation: none; }
+            .desktop-content { transform: none !important; }
+        }
+        @media (max-width: 768px) {
+            #bg3d { display: none; }
+            .desktop-icon .icon-image, .desktop-icon .icon-label { transform: none; }
         }
 
         .window-header {
@@ -553,6 +625,94 @@
             color: #00ff41;
             font-size: 0.9rem;
         }
+
+        /* ===== Project System ===== */
+        .proj-nav {
+            display: flex; align-items: center; gap: .75rem;
+            margin-bottom: 1rem; flex-wrap: wrap;
+        }
+        .proj-back {
+            background: rgba(0,255,65,.08); color: #00ff41;
+            border: 1px solid rgba(0,255,65,.35); border-radius: 6px;
+            padding: .4rem .9rem; cursor: pointer; font-family: monospace;
+            font-size: .85rem; transition: all .2s;
+        }
+        .proj-back:hover { background: rgba(0,255,65,.18); box-shadow: 0 0 12px rgba(0,255,65,.35); }
+        .proj-crumb { color: #7fd8e8; font-size: .85rem; font-family: monospace; }
+        .proj-cat-intro { color: #9fb0c0; font-size: .9rem; margin: .2rem 0 1.2rem; line-height: 1.6; }
+
+        .proj-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 1rem;
+        }
+        .proj-card {
+            position: relative; background: linear-gradient(160deg, rgba(10,20,45,.9), rgba(6,10,25,.95));
+            border: 1px solid rgba(0,255,65,.2); border-radius: 12px; padding: 1.2rem;
+            cursor: pointer; transition: transform .25s, box-shadow .25s, border-color .25s;
+            transform-style: preserve-3d;
+        }
+        .proj-card:hover {
+            border-color: #00ff41; transform: translateY(-6px) rotateX(4deg);
+            box-shadow: 0 18px 40px rgba(0,0,0,.5), 0 0 22px rgba(0,255,65,.18);
+        }
+        .proj-card-icon { font-size: 2.2rem; margin-bottom: .5rem; }
+        .proj-card-name { color: #00ff41; font-size: 1.02rem; font-weight: bold; margin-bottom: .35rem; }
+        .proj-card-desc { color: #9fb0c0; font-size: .82rem; line-height: 1.5; }
+        .proj-card-tags { margin-top: .7rem; display: flex; gap: .4rem; flex-wrap: wrap; }
+        .proj-tag {
+            font-size: .68rem; padding: .18rem .5rem; border-radius: 20px;
+            background: rgba(0,217,255,.1); color: #7fd8e8; border: 1px solid rgba(0,217,255,.25);
+            font-family: monospace;
+        }
+        .proj-tag.lang { background: rgba(0,255,65,.1); color: #00ff41; border-color: rgba(0,255,65,.25); }
+        .proj-tag.status-active { background: rgba(0,255,65,.12); color: #00ff41; }
+        .proj-tag.status-proto { background: rgba(255,193,7,.12); color: #ffd54f; border-color: rgba(255,193,7,.3); }
+        .proj-tag.status-dev { background: rgba(156,110,255,.14); color: #c3a6ff; border-color: rgba(156,110,255,.3); }
+
+        /* Project detail */
+        .proj { white-space: normal; font-family: 'Segoe UI', system-ui, sans-serif; color: #d6e2ee; }
+        .proj-header { border-bottom: 1px solid rgba(0,255,65,.2); padding-bottom: 1rem; margin-bottom: 1.2rem; }
+        .proj-title { color: #00ff41; font-size: 1.5rem; font-weight: bold; margin-bottom: .5rem; display:flex; align-items:center; gap:.6rem; }
+        .proj-badges { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .8rem; }
+        .proj-desc-full { color: #b9c7d6; font-size: .95rem; line-height: 1.7; }
+        .proj a.gh-link { color: #7fd8e8; text-decoration: none; border-bottom: 1px dotted #7fd8e8; }
+        .proj a.gh-link:hover { color: #00ff41; border-color: #00ff41; }
+        .proj h3.proj-sec {
+            color: #7fd8e8; font-size: 1.05rem; margin: 1.8rem 0 .8rem; padding-left: .6rem;
+            border-left: 3px solid #00ff41; letter-spacing: .5px;
+        }
+        .proj ul.proj-feats { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: .4rem .9rem; }
+        .proj ul.proj-feats li { color: #b9c7d6; font-size: .87rem; padding-left: 1.3rem; position: relative; line-height: 1.5; }
+        .proj ul.proj-feats li::before { content: '▹'; color: #00ff41; position: absolute; left: 0; }
+        .proj-cmds { background: #05070f; border: 1px solid rgba(0,255,65,.18); border-radius: 8px; padding: 1rem 1.2rem; font-family: monospace; font-size: .84rem; line-height: 1.9; overflow-x: auto; }
+        .proj-cmds .c-comment { color: #5c7a8a; }
+        .proj-cmds .c-cmd { color: #00ff41; }
+        .proj-note { background: rgba(255,193,7,.08); border: 1px solid rgba(255,193,7,.3); border-radius: 8px; padding: .8rem 1rem; color: #ffd54f; font-size: .84rem; margin: 1rem 0; line-height: 1.6; }
+
+        /* Architecture SVG */
+        .arch-wrap { background: #05070f; border: 1px solid rgba(0,255,65,.18); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+        .arch-wrap svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+
+        /* Self-contained CSS flowchart (install / step-by-step) — no CDN, works offline */
+        .flow-steps { counter-reset: st; list-style: none; padding: 0; margin: .4rem 0 0; }
+        .flow-steps li {
+            counter-increment: st; position: relative; padding: .75rem 1rem .75rem 3.1rem;
+            margin: 0 0 1.5rem; background: #05070f; border: 1px solid rgba(0,217,255,.22);
+            border-left: 3px solid #00d9ff; border-radius: 8px; color: #cfe0ec; font-size: .9rem; line-height: 1.5;
+            box-shadow: 0 4px 12px rgba(0,0,0,.35);
+        }
+        .flow-steps li::before {
+            content: counter(st); position: absolute; left: .8rem; top: 50%; transform: translateY(-50%);
+            width: 1.7rem; height: 1.7rem; border-radius: 50%;
+            background: rgba(0,217,255,.16); border: 1px solid rgba(0,217,255,.5);
+            color: #00d9ff; font-family: monospace; font-size: .82rem; font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .flow-steps li:not(:last-child)::after {
+            content: '▼'; position: absolute; left: 1.65rem; bottom: -1.3rem; transform: translateX(-50%);
+            color: #00d9ff; font-size: .72rem; opacity: .65;
+        }
+        .flow-steps li:last-child { margin-bottom: .3rem; }
 
         /* Typewriter Bio Notification */
         .typewriter-notification {
@@ -715,25 +875,21 @@
             }
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
     <!-- Login Screen -->
     <div id="login-screen">
         <div class="login-box">
             <div class="kali-logo"></div>
-            <h1>Kali Linux</h1>
-            <p>AkmOS Security Platform</p>
+            <h1>Akm Nizum</h1>
+            <p>Security Operations Platform</p>
             <form class="login-form" id="login-form">
                 <div class="form-group">
                     <label>Username:</label>
                     <input type="text" value="akm-nizum" readonly>
                 </div>
-                <div class="form-group">
-                    <label>Password:</label>
-                    <input type="password" id="password" placeholder="Enter password">
-                    <p class="hint">Hint: "password" (all lowercase)</p>
-                </div>
-                <div class="error-msg" id="error-msg">Access Denied! Incorrect password.</div>
+                <p class="login-welcome">Welcome — click Login to enter.</p>
                 <button type="submit" class="login-btn">LOGIN</button>
             </form>
         </div>
@@ -744,6 +900,8 @@
 
     <!-- Desktop Environment -->
     <div id="desktop">
+        <!-- 3D WebGL background -->
+        <canvas id="bg3d"></canvas>
         <!-- Top Bar -->
         <div class="top-bar">
             <div class="top-bar-left">
@@ -756,7 +914,10 @@
                             <div class="menu-dropdown-item" onclick="openFromMenu('about')">👤 About Me</div>
                             <div class="menu-dropdown-item" onclick="openFromMenu('experience')">💼 Experience</div>
                             <div class="menu-dropdown-item" onclick="openFromMenu('certifications')">🏆 Certifications</div>
-                            <div class="menu-dropdown-item" onclick="openFromMenu('projects')">📁 Projects</div>
+                            <div class="menu-dropdown-item" onclick="openProjectCategory('security-tools')">🛡️ Security Tools</div>
+                            <div class="menu-dropdown-item" onclick="openProjectCategory('labs-infra')">🖥️ Labs &amp; Infrastructure</div>
+                            <div class="menu-dropdown-item" onclick="openProjectCategory('web-dev')">🌐 Web Development</div>
+                            <div class="menu-dropdown-item" onclick="openProjectCategory('concepts')">🧪 Concepts (R&amp;D)</div>
                             <div class="menu-dropdown-item" onclick="openFromMenu('skills')">⚙️ Skills</div>
                             <div class="menu-dropdown-item" onclick="openFromMenu('tools')">🔧 Tools</div>
                             <div class="menu-dropdown-item" onclick="openFromMenu('cisco-projects')">📁 Cisco Projects</div>
@@ -793,9 +954,21 @@
                 <div class="icon-image">🏆</div>
                 <div class="icon-label">Certifications</div>
             </div>
-            <div class="desktop-icon" data-folder="projects">
-                <div class="icon-image">📁</div>
-                <div class="icon-label">Projects</div>
+            <div class="desktop-icon" data-projcat="security-tools">
+                <div class="icon-image">🛡️</div>
+                <div class="icon-label">Security Tools</div>
+            </div>
+            <div class="desktop-icon" data-projcat="labs-infra">
+                <div class="icon-image">🖥️</div>
+                <div class="icon-label">Labs &amp; Infra</div>
+            </div>
+            <div class="desktop-icon" data-projcat="web-dev">
+                <div class="icon-image">🌐</div>
+                <div class="icon-label">Web Dev</div>
+            </div>
+            <div class="desktop-icon" data-projcat="concepts">
+                <div class="icon-image">🧪</div>
+                <div class="icon-label">Concepts</div>
             </div>
             <div class="desktop-icon" data-folder="skills">
                 <div class="icon-image">⚙️</div>
@@ -835,7 +1008,7 @@
             <div class="typewriter-header">
                 <div class="typewriter-title">
                     <span>👋</span>
-                    <span>Welcome to AkmOS</span>
+                    <span>Welcome to Akm Nizum</span>
                 </div>
                 <button class="typewriter-close" onclick="closeTypewriter()">×</button>
             </div>
@@ -854,7 +1027,7 @@
         <div class="window-header">
             <div class="window-title">
                 <span>💻</span>
-                <span>Terminal - akm-nizum@akmos</span>
+                <span>Terminal - akm-nizum@portfolio</span>
             </div>
             <div class="window-controls">
                 <div class="window-btn minimize" onclick="minimizeWindow('terminal-window')"></div>
@@ -865,7 +1038,7 @@
         <div class="terminal-body" id="terminal-body">
             <div id="terminal-output"></div>
             <div class="terminal-prompt">
-                <span class="prompt-user">akm-nizum@akmos</span>:<span class="prompt-path">~</span>$
+                <span class="prompt-user">akm-nizum@portfolio</span>:<span class="prompt-path">~</span>$
                 <input type="text" id="terminal-input" autofocus>
             </div>
         </div>
@@ -1193,104 +1366,6 @@ TECHNICAL COMPETENCIES
 Click "View Certificate PDF" below to see the full certificate.`,
                         pdfUrl: 'assets/docs/Certs.pdf#page=3'
                     }
-                }
-            },
-            projects: {
-                type: 'folder',
-                icon: '📁',
-                title: 'Projects',
-                files: {
-                    'RI-Thoric': `RI-THORIC - Universal Website Pentesting Tool
-════════════════════════════════════════════════════════════
-Type: Penetration Testing Tool
-Language: Python
-Status: Active
-GitHub: https://github.com/anizum1/RI-Thoric
-
-DESCRIPTION
------------
-A universal website penetration testing tool designed for comprehensive 
-security assessment. Automates vulnerability discovery, SQL injection 
-testing, XSS detection, and generates detailed security reports.
-
-FEATURES
---------
-• Automated vulnerability scanning
-• SQL injection detection
-• Cross-Site Scripting (XSS) testing
-• Directory traversal checks
-• Authentication bypass testing
-• Report generation (PDF/HTML)
-• Multi-threaded scanning
-• Custom payload support`,
-                    'BlissFuss': `BLISSFUSS - DeepFake & AI Content Detection
-════════════════════════════════════════════════════════════
-Type: AI Security Tool
-Language: Python
-Status: Active
-GitHub: https://github.com/anizum1/BlissFuss
-
-DESCRIPTION
------------
-Advanced application for detecting DeepFake and AI-generated content. 
-Uses machine learning algorithms to identify synthetic media and 
-protect against digital manipulation threats.
-
-FEATURES
---------
-• DeepFake video detection
-• AI-generated image identification
-• Audio deepfake detection
-• Confidence scoring
-• Batch processing
-• Real-time analysis
-• Detailed forensic reports`,
-                    'Mr. Holmes': `MR. HOLMES - OSINT Investigation Tool
-════════════════════════════════════════════════════════════
-Type: Open Source Intelligence
-Language: Python
-Status: Active
-GitHub: https://github.com/anizum1/Mr.-Holmes
-
-DESCRIPTION
------------
-A powerful OSINT investigation tool designed for legitimate research, 
-academic projects, and ethical security analysis. Automates data 
-collection from multiple sources for comprehensive intelligence gathering.
-
-FEATURES
---------
-• Multi-source data aggregation
-• Social media reconnaissance
-• Email and username enumeration
-• Domain and IP investigation
-• Metadata extraction
-• Relationship mapping
-• Export to multiple formats
-• Automated report generation`,
-                    'API Scanner': `API SCANNER - Vulnerability Assessment Tool
-════════════════════════════════════════════════════════════
-Type: Security Scanner
-Language: Python
-Status: Active
-GitHub: https://github.com/anizum1/API_Scanner
-
-DESCRIPTION
------------
-Automated API vulnerability scanner that identifies security weaknesses 
-in web applications. Scans for common vulnerabilities and generates 
-detailed reports.
-
-FEATURES
---------
-• REST API security testing
-• Authentication testing
-• Authorization bypass checks
-• Rate limiting analysis
-• Input validation testing
-• Injection vulnerability detection
-• Report generation (PDF/TXT)
-• Custom test cases`
                 }
             },
             skills: {
@@ -2189,17 +2264,8 @@ PERFECT FOR:
         // Login
         document.getElementById('login-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            const password = document.getElementById('password').value;
-            const errorMsg = document.getElementById('error-msg');
-
-            if (password === 'password') {
-                errorMsg.classList.remove('show');
-                document.getElementById('login-screen').style.display = 'none';
-                startBootSequence();
-            } else {
-                errorMsg.classList.add('show');
-                document.getElementById('password').value = '';
-            }
+            document.getElementById('login-screen').style.display = 'none';
+            startBootSequence();
         });
 
         // Boot Sequence
@@ -2208,7 +2274,7 @@ PERFECT FOR:
             bootScreen.classList.add('active');
 
             const messages = [
-                '[  OK  ] Started AkmOS Security System',
+                '[  OK  ] Started Akm Nizum Security System',
                 '[  OK  ] Reached target Graphical Interface',
                 '[ INFO ] Loading Kali Linux environment...',
                 '[  OK  ] Started OpenSSH Server Daemon',
@@ -2219,7 +2285,7 @@ PERFECT FOR:
                 '[  OK  ] Wireshark capture engine started',
                 '[ INFO ] Loading desktop environment...',
                 '[  OK  ] Desktop manager started',
-                '[ INFO ] Welcome to AkmOS v1.0',
+                '[ INFO ] Welcome to Akm Nizum v1.0',
                 '',
                 'Starting graphical interface...'
             ];
@@ -2248,11 +2314,109 @@ PERFECT FOR:
             document.getElementById('desktop').classList.add('active');
             updateClock();
             setInterval(updateClock, 1000);
-            
+
+            // Kick off the 3D background + depth interactions
+            init3DBackground();
+            initDepthInteractions();
+
             // Start typewriter effect after a short delay
             setTimeout(() => {
                 startTypewriter();
             }, 500);
+        }
+
+        // ===== 3D WebGL background (three.js) =====
+        function init3DBackground() {
+            const canvas = document.getElementById('bg3d');
+            const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (!canvas || !window.THREE || reduce || window.innerWidth <= 768 || canvas.dataset.init) return;
+            canvas.dataset.init = '1';
+            try {
+                const scene = new THREE.Scene();
+                scene.fog = new THREE.FogExp2(0x03060f, 0.055);
+                const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100);
+                camera.position.z = 14;
+                const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                renderer.setSize(window.innerWidth, window.innerHeight);
+
+                // Floating particle field
+                const COUNT = 900;
+                const geo = new THREE.BufferGeometry();
+                const pos = new Float32Array(COUNT * 3);
+                for (let i = 0; i < COUNT * 3; i++) pos[i] = (Math.random() - 0.5) * 60;
+                geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+                const pmat = new THREE.PointsMaterial({ color: 0x00ff88, size: 0.09, transparent: true, opacity: 0.75, blending: THREE.AdditiveBlending, depthWrite: false });
+                const points = new THREE.Points(geo, pmat);
+                scene.add(points);
+
+                // Receding neon grid for depth
+                const grid = new THREE.GridHelper(120, 60, 0x00d9ff, 0x0a3a4a);
+                grid.material.transparent = true;
+                grid.material.opacity = 0.18;
+                grid.position.y = -8;
+                scene.add(grid);
+
+                // Wireframe icosahedra drifting in space
+                const shapes = [];
+                const smat = new THREE.MeshBasicMaterial({ color: 0x00ff41, wireframe: true, transparent: true, opacity: 0.25 });
+                for (let i = 0; i < 5; i++) {
+                    const m = new THREE.Mesh(new THREE.IcosahedronGeometry(1.4 + Math.random() * 1.6, 0), smat);
+                    m.position.set((Math.random() - 0.5) * 34, (Math.random() - 0.5) * 16, -Math.random() * 22);
+                    m.userData.sp = 0.002 + Math.random() * 0.004;
+                    scene.add(m);
+                    shapes.push(m);
+                }
+
+                let tx = 0, ty = 0;
+                window.__bgParallax = (nx, ny) => { tx = nx; ty = ny; };
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+
+                const clock = new THREE.Clock();
+                (function animate() {
+                    requestAnimationFrame(animate);
+                    const t = clock.getElapsedTime();
+                    points.rotation.y = t * 0.03;
+                    points.rotation.x = t * 0.015;
+                    shapes.forEach(m => { m.rotation.x += m.userData.sp; m.rotation.y += m.userData.sp * 1.3; });
+                    // Smooth parallax toward pointer
+                    camera.position.x += (tx * 3 - camera.position.x) * 0.04;
+                    camera.position.y += (-ty * 2 - camera.position.y) * 0.04;
+                    camera.lookAt(0, -1, 0);
+                    renderer.render(scene, camera);
+                })();
+            } catch (e) { /* WebGL unavailable — static wallpaper remains */ }
+        }
+
+        // ===== Cursor-driven depth: icon tilt + wallpaper/camera parallax =====
+        function initDepthInteractions() {
+            if (window.__depthInit) return;
+            window.__depthInit = true;
+            const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduce || window.matchMedia('(hover: none)').matches) return;
+            const desktop = document.getElementById('desktop');
+
+            // Parallax feed for the WebGL camera
+            desktop.addEventListener('mousemove', (e) => {
+                const nx = (e.clientX / window.innerWidth) - 0.5;
+                const ny = (e.clientY / window.innerHeight) - 0.5;
+                if (window.__bgParallax) window.__bgParallax(nx, ny);
+            });
+
+            // Per-icon tilt toward the cursor
+            document.querySelectorAll('.desktop-icon').forEach(icon => {
+                icon.addEventListener('mousemove', (e) => {
+                    const r = icon.getBoundingClientRect();
+                    const px = (e.clientX - r.left) / r.width - 0.5;
+                    const py = (e.clientY - r.top) / r.height - 0.5;
+                    icon.style.transform = `translateY(-5px) rotateY(${px * 16}deg) rotateX(${-py * 16}deg)`;
+                });
+                icon.addEventListener('mouseleave', () => { icon.style.transform = ''; });
+            });
         }
 
         // Typewriter Effect
@@ -2352,10 +2516,10 @@ PERFECT FOR:
 
         // System Menu
         window.showAboutSystem = function() {
-            const systemInfo = `AKMOS SYSTEM INFORMATION
+            const systemInfo = `AKM NIZUM — SYSTEM INFORMATION
 ════════════════════════════════════════════════════════════
 
-System: AkmOS v1.0
+System: Akm Nizum v1.0
 Based on: Kali Linux Rolling
 Kernel: 5.15.0-akm-security
 Architecture: x86_64
@@ -2378,7 +2542,7 @@ For more information, explore the desktop icons or use the terminal.`;
 
         // Help Menu
         window.showHelp = function() {
-            const helpInfo = `AKMOS HELP
+            const helpInfo = `AKM NIZUM — HELP
 ════════════════════════════════════════════════════════════
 
 GETTING STARTED:
@@ -2442,6 +2606,8 @@ For questions, contact: zanzorofel@gmail.com`;
                 openTerminal();
             } else if (icon.dataset.action === 'download-resume') {
                 downloadResume();
+            } else if (icon.dataset.projcat) {
+                openProjectCategory(icon.dataset.projcat);
             } else if (icon.dataset.folder) {
                 openFolder(icon.dataset.folder);
             } else if (icon.dataset.file) {
@@ -2459,7 +2625,7 @@ For questions, contact: zanzorofel@gmail.com`;
             // Initialize terminal
             if (!terminal.dataset.initialized) {
                 terminal.dataset.initialized = 'true';
-                printTerminal('AkmOS Terminal v1.0.0');
+                printTerminal('Akm Nizum Terminal v1.0.0');
                 printTerminal('Type "help" for available commands\n');
                 
                 // Set up input handler
@@ -2480,7 +2646,7 @@ For questions, contact: zanzorofel@gmail.com`;
                     historyIndex = commandHistory.length;
                     
                     // Display command
-                    printTerminal(`<span class="prompt-user">akm-nizum@akmos</span>:<span class="prompt-path">${currentPath}</span>$ ${command}`);
+                    printTerminal(`<span class="prompt-user">akm-nizum@portfolio</span>:<span class="prompt-path">${currentPath}</span>$ ${command}`);
                     
                     // Execute command
                     executeCommand(command);
@@ -2524,7 +2690,7 @@ For questions, contact: zanzorofel@gmail.com`;
                     printTerminal(currentPath, 'output-success');
                     break;
                 case 'whoami':
-                    printTerminal('akm-nizum', 'output-success');
+                    showWhoami();
                     break;
                 case 'neofetch':
                     showNeofetch();
@@ -2546,6 +2712,26 @@ For questions, contact: zanzorofel@gmail.com`;
                 default:
                     printTerminal(`Command not found: ${cmd}. Type 'help' for available commands.`, 'output-error');
             }
+        }
+
+        function showWhoami() {
+            const card = `<span class="output-info">
+┌─[ <span class="output-success">akm-nizum</span> ]──────────────────────────────────────────────┐
+│</span>
+│  <span class="output-success">Akm Ahad Nizum</span>
+│  <span style="color:#aaa;">Security Operations · Network &amp; Systems · Incident Response</span>
+│
+│  <span class="output-info">📍 Location   </span> Murphy, TX
+│  <span class="output-info">🎓 Education  </span> B.A.T. Cybersecurity — Collin College (Dec 2026)
+│  <span class="output-info">🏆 Certs      </span> CCNA · NSA CAE-CD · Security+ (Oct 2026) · GICSP (pursuing)
+│  <span class="output-info">🛡️ Focus      </span> Threat hunting · SIEM · Vuln mgmt · Incident response
+│  <span class="output-info">🧰 Stack      </span> Wazuh · Splunk · Snort · Wireshark · Nessus · Python · Bash
+│  <span class="output-info">💼 Role       </span> Incident Response Specialist @ Technauf (2024–Present)
+│
+│  <span class="output-info">🔗 Links      </span> github.com/anizum1 · linkedin.com/in/akm-nizum
+│  <span style="color:#888;">Type <span class="output-success">help</span> for commands, or <span class="output-success">neofetch</span> for the system banner.</span>
+<span class="output-info">└──────────────────────────────────────────────────────────────┘</span>`;
+            printTerminal(card);
         }
 
         function showHelp() {
@@ -2603,13 +2789,13 @@ Examples:
         }
 
         function showNeofetch() {
-            const neofetch = `       akm-nizum@akmos
+            const neofetch = `       akm-nizum@portfolio
        ─────────────────
-       OS: AkmOS 1.0 LTS
+       OS: Akm Nizum 1.0 LTS
        Host: Kali Linux Portfolio
        Kernel: 5.15.0-akm-security
        Shell: bash 5.1.16
-       Terminal: AkmOS Terminal
+       Terminal: Akm Nizum Terminal
        
        Certifications: 4 active
        Projects: 18+ completed
@@ -2816,12 +3002,27 @@ Examples:
             addTaskBarItem('file-window', `${file.icon} ${file.title}`);
         }
 
-        // Download Resume
+        // Download Resume (PDF embedded so it works with no external file / offline)
+        const RESUME_PDF_B64 = "JVBERi0xLjQKJZOMi54gUmVwb3J0TGFiIEdlbmVyYXRlZCBQREYgZG9jdW1lbnQgKG9wZW5zb3VyY2UpCjEgMCBvYmoKPDwKL0YxIDIgMCBSIC9GMiAzIDAgUiAvRjMgNCAwIFIKPj4KZW5kb2JqCjIgMCBvYmoKPDwKL0Jhc2VGb250IC9IZWx2ZXRpY2EgL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcgL05hbWUgL0YxIC9TdWJ0eXBlIC9UeXBlMSAvVHlwZSAvRm9udAo+PgplbmRvYmoKMyAwIG9iago8PAovQmFzZUZvbnQgL0hlbHZldGljYS1Cb2xkIC9FbmNvZGluZyAvV2luQW5zaUVuY29kaW5nIC9OYW1lIC9GMiAvU3VidHlwZSAvVHlwZTEgL1R5cGUgL0ZvbnQKPj4KZW5kb2JqCjQgMCBvYmoKPDwKL0Jhc2VGb250IC9IZWx2ZXRpY2EtT2JsaXF1ZSAvRW5jb2RpbmcgL1dpbkFuc2lFbmNvZGluZyAvTmFtZSAvRjMgL1N1YnR5cGUgL1R5cGUxIC9UeXBlIC9Gb250Cj4+CmVuZG9iago1IDAgb2JqCjw8Ci9Db250ZW50cyAxMCAwIFIgL01lZGlhQm94IFsgMCAwIDYxMiA3OTIgXSAvUGFyZW50IDkgMCBSIC9SZXNvdXJjZXMgPDwKL0ZvbnQgMSAwIFIgL1Byb2NTZXQgWyAvUERGIC9UZXh0IC9JbWFnZUIgL0ltYWdlQyAvSW1hZ2VJIF0KPj4gL1JvdGF0ZSAwIC9UcmFucyA8PAoKPj4gCiAgL1R5cGUgL1BhZ2UKPj4KZW5kb2JqCjYgMCBvYmoKPDwKL0NvbnRlbnRzIDExIDAgUiAvTWVkaWFCb3ggWyAwIDAgNjEyIDc5MiBdIC9QYXJlbnQgOSAwIFIgL1Jlc291cmNlcyA8PAovRm9udCAxIDAgUiAvUHJvY1NldCBbIC9QREYgL1RleHQgL0ltYWdlQiAvSW1hZ2VDIC9JbWFnZUkgXQo+PiAvUm90YXRlIDAgL1RyYW5zIDw8Cgo+PiAKICAvVHlwZSAvUGFnZQo+PgplbmRvYmoKNyAwIG9iago8PAovUGFnZU1vZGUgL1VzZU5vbmUgL1BhZ2VzIDkgMCBSIC9UeXBlIC9DYXRhbG9nCj4+CmVuZG9iago4IDAgb2JqCjw8Ci9BdXRob3IgKFwoYW5vbnltb3VzXCkpIC9DcmVhdGlvbkRhdGUgKEQ6MjAyNjA5MDcxOTUyMjErMDAnMDAnKSAvQ3JlYXRvciAoXCh1bnNwZWNpZmllZFwpKSAvS2V5d29yZHMgKCkgL01vZERhdGUgKEQ6MjAyNjA5MDcxOTUyMjErMDAnMDAnKSAvUHJvZHVjZXIgKFJlcG9ydExhYiBQREYgTGlicmFyeSAtIFwob3BlbnNvdXJjZVwpKSAKICAvU3ViamVjdCAoXCh1bnNwZWNpZmllZFwpKSAvVGl0bGUgKFwoYW5vbnltb3VzXCkpIC9UcmFwcGVkIC9GYWxzZQo+PgplbmRvYmoKOSAwIG9iago8PAovQ291bnQgMiAvS2lkcyBbIDUgMCBSIDYgMCBSIF0gL1R5cGUgL1BhZ2VzCj4+CmVuZG9iagoxMCAwIG9iago8PAovRmlsdGVyIFsgL0FTQ0lJODVEZWNvZGUgL0ZsYXRlRGVjb2RlIF0gL0xlbmd0aCAzNDQ3Cj4+CnN0cmVhbQpHYXVgVUNObksnJyllRC9kOWdMR1pTPTRdK0dwJygiPl51MEBsJmoyQihsImk0Y1JyVlk5YyYnOTZTQ0UrMj45aCVoSzctRy5fSDgnQjlBR1drKTJRbFcuR1cyWkIqP0IrUGFJSVMpNUEwbzlWLGwoIi0kaUszOj0pLC9xOEk6SlJlM2FLV0lUJm5zVD5XJ2E2ZmxeI3BIMWZwOGYtOUo9JT88NDBkckFdUVA6XjguUDpfM2NnJCdEbGEyWmxfT0lZdS1OQ2BNKm11Z29kczdQLjEvWGNUbjlgSVJjTkxPPXRZUD5HPiVGIUFSMWBwRlJlM2I4Km5CSkRsLjFUMTc/ImsrZWxLcFNkUGUhWWElK2slJ1NMdVdaZjY4ZVclWm4iJyRoQk5wQ04/YWouRiNAbixVKG1HWlRqP2E2RVhKYi4rM0o1MVJZPVVgYVZOOldROF1hUD1tJlNTaDBTITBoX1dpWjZVWyg5V2k9W19lNWt1PT0tLycmWGheXFB0ODc4ck1LQ0dySEdtMUVXOGJSMjRWKlRcbzFYO3FrYTBicTdsS0VQYyhTRHFPQzYvWURnMU80ZzIwZypBSSlVUUQ9RyZKXzVOWGtePy1rMXBtOmZMYWVDRDVmQi1HRE9ZWGElR3MyNjdebG1bW1U0Z1s4TyJEamdwPChpYigna2s+ZW1GQV9TPjooK2UnOTE+TlJfaS8oSFNIIzxhVG8xPFI1PlxFTWJocnVOQ19FdE5DaF1AZiU0TG5DN2tUKUlzcXFoN0o4aSc9aiwkQyVtZW1FSTs6YV5mWDtoN0ZrcGhhWEJ0bTJxVUE3Z3NFY1VLXWs3MWVkSXJHPGBmJTxaJj1HSSQ8YilhLyE1IUw1WHJOWz4wZTBHYissJV9mRzo+N3M4NmA0YF07Mz5yXFopbFkzT3IoI15aUHBdLy1hYkUoXyM7X0crTWJhRlxEOiZPI2BfJyxAbkFCZWQ7TS1TRlI7JEFBSzEpPiFNVDlIKFA+OGtMRGlBKXE/MyUpIzVpaUg7JWtLJjE4L0ZjKjk2ckxrUzxuOTZiaD1cQWNcWyQkQ2UqcktzOV0rLVowWlY5VFZRbTxiP2NCJjFlUGNvNHBdYXFeOSouUkw6KUFiS2IjME1ELlVxOyI9KlNsczFHciwjcS0qWT1VOmRqPlNLPzc1L29cTDROOFwhVD1lYGpiQEhzOTcyKnVwcDg0ZURoLmwxO3VeZi1Bb1widThgXlk+ND84V1hbI0FyT2FYK1Q7Ol5ZOCs4VTxjQWk+PkhdRDtkZElXS3JDY11ILDlHOWxMJCZYOSM4JmBYRy9yaF83XjdzNVYqVT0oQCEjLWJuZ0hlR0FpcnRSZF85R00yaiZdKytrPyFLUDIpVSZxcjxVbnBtY2BHbDxPSyhSRW9pSSRKIXRlRilvNmByMHQuZiRcQktCbkolOVFZZEBpKU0lb1wpP15uSG0jITpjTzciVSpFJDZzTjNkaEtQYmxTPDREbFJAKlRLLWNGRDkjUjdsPGlcYyJWVUpPNUBeM3FAVXFgTStbKkQ3M09oUVhlPTpOYSllMj1bQm41Qj8nISs5aWghWidna2AraU5FaC04cShSZFA6IV0oZ2AxOkFRb1kiNEZxJU48ZHFLRmFsQjxTOVFacmA7Xm91TS5LYC4ySmUrOWQ9YnBHRDpgY2IsLTJWS1xQZVUzRTxtJXRxN2dcZVtuLF5CSiJca3JRUlA5PVFbKUlfIm5EbFFQUjI6P1AhRVNLLlVrIzEwU19VY109NTwvSl1XaihiJDx0bCtAby1rSkZuYjUpSUtdUkZZc3BAYSduOHNBcmBbW1ZILHMnV1J1cXBDV1RRczw4T0VFa20zaUVhUTY1JEd0ZUg8OCdwTTM6SThuOj8vUDxeSm9pWE9edCRPI1U2bWolV1JuKV9rRnBjOD9UZylgYV0iRlw4Q3IzSTU0IjddN19lVDJHXVN1Ty0paCJyZScmMHEuTThFL1wwZiZ1Z11MWCY3RTtmLSxvK05FXjBuIkdLbkolJ1pWVE5HNGU6I3VpUyhIdGZlMz86J1cmJjFSQC9HXTt0MnM1NF1qMFhTRl0xQFE3VzlNbTUuRVxcYUM7YiEuXWBbTiU0cj9rVWIucGlLL19sWVRaZjNKRj1KJCFeUHI1NyJvW1I+ZE5XVWNOTmEnOS1yaiJNVjEhWVpbKltRVCxaJTY4cjpiQW51aSI8MTI0aXErVDRqMipgQT1SaEFdNTIlJVZBVTtrUi02PGg3KVhCWnNrZGlDNkVEL0JoJkQiSEo0MFFFJSo2IWpcIkhDPixpXicjWnQ1X1dQUD8zLUYqdTw7bEI1cGwxVV8xRjtMYy9pQVZyNEd0bl5iXXQsbWE1ZWBzNC02NzI/K15MXm5WQ0MqK1VWNWoiL1JkQk9tdUdkVi9CckpwMGZkb1EhSE8+LzJtQCsoNVxtL2lecS0mSDRqQlgiRGIiUWtlLixPOTpBYCsvLDxKMU1LJidRJUkrPyJTaEpGM0EvNDRKNF5SSC9RZyFlKSxmaTU+RHMwRjRZSU5VMnEzaENpRk4hNl1EWlVAIWZpJFomVCQkMDYiOUt0KVVWZUZrXTwkQV1dW0tqRGdZUFMsJU9zSGBlWW8sYyRNNSNhNGUhOGJdQG80VSwvbyg4Uz5xOkg4cz9XSmJyVSgkXCszRT9cVWdZTjBcc2lEanQoPGxTYkJbZF4mcnFiMyYyWztJTm9UdCkraiEiXldySm9PUUAyTVRQTCh1R0dFNi45RjYwWVxjIm8jXlEvVy82Ul1kZVdNX2UzcFVXRTQ8bFxCbUZfazhoMDIwdFpYMSNJZWc9b15FXTwxOCtZPlYocFRXOF4wM3FbPD1GWWVTLj0hQnRDOCleXS5nNDJPZDEjJHFCXUJfOWkpYEk5OGhIT2VdcSlkWl9aPFQuU1hocDFFSERQVVJEOFdPXjZYdEdeaUl0LTtkJCNnPz1iYydbZFo2ZSYmRlcuI0NFWFFqMiZAQVtAM1xCVzlbZXFvSCRrMygvYC9UcyVcZFl0YTk1Zkk8a0hpTnIxYSpKTV1fK11oLzRmYClEQEdyYCpILUU1WjB1XHBkWzJpZiowNDJKa1FmdTdOdT1cNzdCYClAOCQxW042SD1kbSZaZVdBTXFmUkgnRTpnNm08NEJnUDIobVJCKW9EPk9STkQ0cEVANz5LbERFRyJGaTdDQUVOTGEzdG83JyZCYysiI0RmU1U7Wz0/REIwXHVaQ1FoP2NoQjsuV0Q+ZWFMTz4jbyQ2UF1mLFZzYm1RNkhbUDdPUCctJFFRTGZLQURFWWlMLSMtQyZvPFJZJDpyQFBTLFB1ImFvUyM3VVNFYnBMcUwhSHRURSQzSD8oQC9rKDtrT2FxOS0hbzo4bkU5Vk9OZSRiMWo3Xj1HTygvZnBlUktmLlZyOCFaYDosJXFJWiwpNW9CS1hTX2pVUFJ1LC8qWCUoPU5fQD9KTiNQa2UhJTpaNVFrajEzL1wlXEdBI21YMm5FYWY8bV1EKDshZUw9IiUvU0lCbCo2T3BsXyhTRyNiJ2ZJL1ZmQCcqLDBGTENCaykhWW02aSNGTW8oSi1kVFo7aS8sRm9jLVBMZUk4WVRzVyInQls2LWs7JDhYRnEnbW4wSTtAY1wrTzhFOylQWEk/MGhTJylmPGdSZjc3aEAiSmBvb14oX2hPcGtiRkZKWVUiYVxBUD5gNG04cDNjIUtmImE1LmdfXiFzJG9BX0ttJjpBP09ZNUQ0dU9uOkZmJy5ZKj4udVFWalhLNUZsPU1XRkwnZXF0MkEvNzQ6J1o0W0kiN0wzNlpqMltsJT8rVkdARjY9TnVHPixzUidiM19TQlhqKixKcm5DbDtMRWNubWdgSj9xVGlubzpec2NpKUQ4aGMuN084cVEzQT1EZiswNmZ0KyxhczVAQz02PDxRVitWKFYtdCVSUzplPGxpLzwjYGk3PWhfPmMkcTZTOUp1SnUuMWVyNCUhZ2N0LkRBcFRKOC5PKlJOWlZzVkN1V0gkOzZvI1oiLiNBWClnYiw8PzpjVlJYNUJNRjY1ckRHIjMxX0siV1toSjs+aDg8SnExVVVfOGUvKjIwPEM3R0hCQDFxUWU9a0pQO0syYVQiVDBKN2BIJTVWPEk3YTo4MXNeY1wjWHUmQmlHTnBrYmdGUSg9NSc5KFRfRzlAJzNIYVZAIktCNFBLZSNMNTosXVFFIWZSbHFIbEs5bzxjbHEtOEVHRWFWJUxaQjM5VEshWVNfI3VcdD8/NGxFUUttKFAnWDktITpYRzAnJlNDSzZsQlNiZDpXJFEuQDxhcTQ7LzY7XzE2K0FpMi4kKE0pN2dHdS1xZjBqZW8pck5PcFpdby9OLElEQT9CTyhwJls/PS8nVFwpZ0k8UEs4alokMCJAT0ZlWUklTz5jZ1NfdG5WNzchYGxAI1RMKj49Z2c2SlFGW01xJDlOIkswX25GLHU4RVk6KCFrIkVSRm4pO0BuNy1yTEhZRWFRMDxNVmQyZWVxK0BqQ1UpOFVIOVwsXistIk9kV05XOGViNC1TLjk3LlpVNixwQW0qc19jL00oYmRyX2dSNjAiRjlUR2ZlcEBufj5lbmRzdHJlYW0KZW5kb2JqCjExIDAgb2JqCjw8Ci9GaWx0ZXIgWyAvQVNDSUk4NURlY29kZSAvRmxhdGVEZWNvZGUgXSAvTGVuZ3RoIDE5MzQKPj4Kc3RyZWFtCkdiIVNsYyFUM2ImQUBbOmJjL0BdKWJhZChFSDNucFVZX2g0WismT1YvamBTTy9bamMrQ2ByXUJHOWY3UTY2UmRca1tALT1PQj5sXWhPQ0YyJkVyJ2BaMl8tTWkkYS9vO1phbWtBLiQ4IUhxO1FBLGhgJ0FPMGcvMU9sSmRkInVtU2VgVVJLSCJITjQhYWhdLjduKz9wSWddSl1waF5pYmxsR0NtU2JjMjA7T2pTXEFINilebE9VR24uU1c+UGhFKSg8b2szQHNXMzMjRTVfP1ltU1dNNnQlMjYxSzJASCtsNzRzWVgyWlMlU2UjUF1cQW1hV2lyVSIyP0BhYG4wIjgwUikrLTVaSHNxXEA5TDY0Njc9Y3VxcThLcCZMOTw0T0RoMFctRDZWbW1tZWp0RjtCbkVPPls+SiM3USRPMlNWRnI3cDdFLXJKITZLTkFXPylHIWdcPTIrPlghZ2trWU01XVs2V1QlKiVgXm5VPF85XCE7PFdtTCk2SlFDU0U3bSFxSWZfTyRATDFVIk1FSi5OUCZYKGklTFAnKz9HUEEmRTtwN1BHUjZnNVRAUWlUSjNMU0NsJm5mWjRJa082J04xMDZITEc3NzBTbE1iWlYmOVs9SEYlNmdtP0g4Nidmay8sYE1wblFoUjVgVS4xWG5SNVJrUmQnWlQ8LD9HOz5wblJSSCRCP2AoL2xyZ1EsTz5zNlZzOmIjRi5QS25ONCclUD1rP2VfS2NdLyciSSxzN1JNZFNdY1FCVy1MMkBISlVeKEFuXFR0UUM4Z008LixzYDNIbC47Z0JqbmcmLFleL08jbXNRKWwmW1s/WzY/aWQuTz9sIUFMPGN1Wk1cZV8rcj8lSWorYEldVnJLMTNMXDZCPENuPVMkbjtfKilyPzorcSlbNUwxSlBWIl5pLSRZYCFnPGFeVjtfWWpYQD8hcWoxNWwwTEAvLVxHS2dfYmBfcWFJMWw9X3VNOjxybUxeJGVIPj9wTWJAT2M+JUY/KzZjOW5nOmJPamZgW1kmZycwJU0/RzhDOWluLi5ORDJkWz5sUmNCU0wsb0VIa1NlWklCN0QoLHM8WzcxaWY0cjFSIkpjTl9sWkduQUZtYiYiQXUlSi5oXm0hPSxxbipiZiYndXBgI2RqWyJSQSNNSyJfRCxNVmNBMjFnZEc9QihiWWtTUjBLVzNUZUZBa2I1MSNbY3BpcVprTTdbSDI9YipMW1JpJGtzbz1YL0pkO0BTUzVNIk86ZjpbRE9lJD9UR291Qk0kQkdeJixQbjtRQWlbQidUPWVrTUZDLS8oLT8nW0lgKlhNblIiLzpQRV1FLlgsYChaI25nKnVkIig9Y1kqTElZPWlUYk8+Z1deY1pVTm1DLWs1SE9bXkVQYkRwQCZebW5rXzYwYSVXZiJ0Qyg+KCpma2woOUJtYyxxR1l0V11XSGE5Rk4oO1wqPlgnJl9ecUMvbjNpOSVcZTo6JkZYWi9FRkInODdNTyleT1RRUFxEIm86OiVoaVhpVz9Wbl9VWkFmaWMuQkFhJC5yV28kJTBKailWSUM8NTBhWjkhTWs3JGpoJS0iMi5IPWc8cF5LZTNbNUFxJEtsXzl0NlY+Rk91QUgkRkRiVFFDRktAKDBkM01PU2NMKCkzUktPcFBoJzF0NlIoRDgwJj1RUj5DRUonTkxSaUFRWjspO0tpVyN0b1JCOigqRjhtbzRybm43UmgrcUEkJFNmRV1NVEE3ISVRJTgmLjtLQVhKclxAVj4iIlNFSDhBZzVGbXJxcWgjPCQ+ZG5FY19NUk1faV5sZDVeI2AsL0gmYF5Aa01BS1BzdERVMD1TW2xtaDRbbFZJakIuPE9aNE1ZL3Rsb0lNV24xL29QQ1dRXjJwUidNS1lOQ0gsR01tUV4xTy9XTFckKy1NalMrQlwyYjhfPVUxPS9UKC1daC9ORGYyWHBjLTEnOmdzOzc9JzE8InJQKXNfR2NPJjRSR2BTZG8nc2hFJnRNTE9UPyFFMWgmZDYpbW5GOEkvaiY4TVFbTnNgJ1VHOyUpcUpDXmcnWGZWTj9RbTE3ZEw4WSEjbmA+KmtzUCNaYTJhUm5PPDRELydXak8rS1diSFxTPWRcQUlKNDgoOCNhNGYoT0ttSGBncHNiRC1VRj9ZIUE7ZGdHJkYqYVJIWjxcUko+MCxxMG1UMCtRZ2tjLSwjbHUrJmdHOShUOFAlXm5FZExWKiRKWWcmOVliOXQiQV1TUS1GMj9lcUpUOFY/aClRKEUuSj0pQzs1XnQ6Zztva1ppRlJEM0FOLTlsMCFTUXBWZygnX2wyPlpTWChIMl5RKnNFMEZQM0kzSl8+S2okMmRoT2g5a2dkRlc1U18pVWNeNko4SVJqZ1MuTkpoYE9QWzE9WT43IVNlOzokKGI1SDQlNl8lZVddSGNDZEVjRzBlTTY4aE9hYUdSMnNKYDlWUU0hOXVGLmY3J2VBQC9tMEpwaV1KaW1TZHUibHBucSM2KDU2NlhiTicrRTxgR2tQbmc8a1gtSTVjTlVnT2NxYExbWCtONmBoMUJjTEtuUi5PSWZkUF1iP1A8YFJGKyg0Vk84SH4+ZW5kc3RyZWFtCmVuZG9iagp4cmVmCjAgMTIKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDYxIDAwMDAwIG4gCjAwMDAwMDAxMTIgMDAwMDAgbiAKMDAwMDAwMDIxOSAwMDAwMCBuIAowMDAwMDAwMzMxIDAwMDAwIG4gCjAwMDAwMDA0NDYgMDAwMDAgbiAKMDAwMDAwMDY0MCAwMDAwMCBuIAowMDAwMDAwODM0IDAwMDAwIG4gCjAwMDAwMDA5MDIgMDAwMDAgbiAKMDAwMDAwMTE4MiAwMDAwMCBuIAowMDAwMDAxMjQ3IDAwMDAwIG4gCjAwMDAwMDQ3ODYgMDAwMDAgbiAKdHJhaWxlcgo8PAovSUQgCls8YWY2NjNmZTA4NTJhNGFlNTE4MzQxYmQ1YmIwOTE3MzY+PGFmNjYzZmUwODUyYTRhZTUxODM0MWJkNWJiMDkxNzM2Pl0KJSBSZXBvcnRMYWIgZ2VuZXJhdGVkIFBERiBkb2N1bWVudCAtLSBkaWdlc3QgKG9wZW5zb3VyY2UpCgovSW5mbyA4IDAgUgovUm9vdCA3IDAgUgovU2l6ZSAxMgo+PgpzdGFydHhyZWYKNjgxMgolJUVPRgo=";
         function downloadResume() {
-            const link = document.createElement('a');
-            link.href = 'assets/docs/Akm_Nizum_Resume__1_.pdf';
-            link.download = 'Akm_Nizum_Resume.pdf';
-            link.click();
+            try {
+                const bin = atob(RESUME_PDF_B64);
+                const bytes = new Uint8Array(bin.length);
+                for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+                const blob = new Blob([bytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'Akm_Nizum_Resume.pdf';
+                document.body.appendChild(link);
+                link.click();
+                setTimeout(() => { URL.revokeObjectURL(url); link.remove(); }, 1500);
+            } catch (e) {
+                const link = document.createElement('a');
+                link.href = 'assets/docs/Akm_Nizum_Resume.pdf';
+                link.download = 'Akm_Nizum_Resume.pdf';
+                link.click();
+            }
         }
 
         // Task Bar Management
@@ -2866,6 +3067,439 @@ Examples:
         // Make typewriter functions globally accessible
         window.closeTypewriter = closeTypewriter;
         window.skipTypewriter = skipTypewriter;
+
+        /* =====================================================================
+           PROJECT SYSTEM  — categories, data, diagram generators, navigation
+           ===================================================================== */
+        const projectCategories = {
+            'security-tools': {
+                icon: '🛡️', title: 'Security Tools',
+                intro: 'Offensive & defensive security tooling — OSINT, web pentesting, API scanning, forensics and more. Built in Python for authorized testing and research. Click any tool for its architecture, install flow and step-by-step guide.',
+                projects: ['mr-holmes', 'ri-thoric', 'api-scanner', 'bluephone', 'sihmasi', 'shafinnachora', 'masspassgen']
+            },
+            'labs-infra': {
+                icon: '🖥️', title: 'Labs & Infrastructure',
+                intro: 'Hands-on lab builds and infrastructure projects from my cybersecurity work — home lab servers, a full SIEM/IDS monitoring stack, cloud hardening, digital forensics and automation pipelines.',
+                projects: ['home-lab', 'siem-lab', 'cloud-hardening', 'forensics', 'pentest-lab', 'automation']
+            },
+            'web-dev': {
+                icon: '🌐', title: 'Web Development',
+                intro: 'Client and full-stack web work delivered alongside the security focus — business sites and e-commerce front-ends built with HTML, CSS and JavaScript.',
+                projects: ['technauf', 'qiraan']
+            },
+            'concepts': {
+                icon: '🧪', title: 'Concepts (R&amp;D)',
+                intro: 'Early-stage ideas and prototypes I am actively developing. These show planned architecture and direction rather than a finished product — repos are seeded and in progress.',
+                projects: ['blissfuss', 'cryptotrade', 'final-project', 'pong']
+            }
+        };
+
+        const projectData = {
+            'mr-holmes': {
+                icon: '🔍', name: 'Mr. Holmes', lang: 'Python', status: 'active',
+                type: 'OSINT Investigation',
+                github: 'https://github.com/anizum1/Mr.-Holmes',
+                short: 'Detective-themed OSINT toolkit — username, social, image, geo, email & hash intelligence in one file.',
+                desc: 'Mr. Holmes is a single-file Open Source Intelligence (OSINT) investigation tool for legitimate research, academic projects and ethical security analysis. It aggregates data from many sources — checking usernames across 20+ platforms with no API required, analysing Twitter/Reddit activity, extracting image EXIF/GPS, geolocating IPs, and identifying hashes — then compiles a case-file report.',
+                arch: { input: 'Target\n(username / email\n/ image / IP)', engine: 'mr_holmes.py — Investigation Engine',
+                    modules: ['Username sweep (20+ sites)', 'Social recon (Twitter / Reddit)', 'Image forensics (EXIF + GPS)', 'Geo & IP lookup', 'Email / phone / hash analysis'],
+                    output: 'Color case-file\n+ JSON report', accent: '#00ff41' },
+                install: ['Download mr_holmes.py', 'pip install requests Pillow exifread', 'chmod +x mr_holmes.py', 'Run once to create config.json', 'Add API keys to config.json (optional)'],
+                usage: ['Pick a module (username / image / geo …)', 'Run: python mr_holmes.py <module> <args>', 'Engine queries the relevant sources', 'Results shown color-coded in terminal', 'Add --report to save the case file'],
+                feats: ['Username check across 20+ platforms (no API)', 'Twitter & Reddit activity analysis', 'Image EXIF + GPS extraction', 'IP geolocation & reverse-geocoding', 'Email, phone & URL analysis', 'Hash identification', 'Animated detective-themed UI', 'JSON / report export'],
+                cmds: [['# Check a username across 20+ platforms (no API)', 'python mr_holmes.py username --check johndoe'],
+                       ['# Extract GPS from a photo', 'python mr_holmes.py image --file photo.jpg --reverse-geocode'],
+                       ['# Full investigation with report', 'python mr_holmes.py investigate --username johndoe --email a@b.com --report']]
+            },
+            'ri-thoric': {
+                icon: '🎯', name: 'RI-Thoric', lang: 'Python', status: 'active',
+                type: 'Web App Pentesting',
+                github: 'https://github.com/anizum1/RI-Thoric',
+                short: 'Universal web-app security scanner with a 5-phase methodology and HTML/JSON reports.',
+                desc: 'RI-Thoric v2.0 is a comprehensive, professional-grade penetration-testing tool for identifying web application vulnerabilities. It follows a 5-phase assessment methodology, crawls the target to discover URLs and forms, then tests for injection, XSS, CSRF, SSRF, misconfigurations and access-control flaws — producing detailed HTML and JSON reports with remediation guidance. For authorized testing only.',
+                arch: { input: 'Target URL\n(+ authorization)', engine: 'rithoric.py — 5-Phase Scan Engine',
+                    modules: ['1 · Recon & crawling', '2 · App vulns (SQLi, XSS, CSRF, XXE, SSRF)', '3 · Infra (SSL/TLS, headers, methods)', '4 · Access control (IDOR, traversal)', '5 · Business logic (rate-limit, CAPTCHA)'],
+                    output: 'HTML + JSON\nreport w/ remediation', accent: '#ff5555' },
+                install: ['git clone the RI-Thoric repo', 'cd RI-Thoric', 'pip install -r requirements.txt', 'Confirm you have written authorization', 'python rithoric.py'],
+                usage: ['Provide target URL + confirm authorization', 'Phase 1 crawls URLs, forms & endpoints', 'Phases 2-5 run vulnerability tests', 'Findings scored & de-duplicated', 'Export HTML / JSON report with fixes'],
+                feats: ['5-phase assessment methodology', 'Automated crawling & endpoint discovery', 'SQLi (error/boolean/time/UNION)', 'Reflected, stored & DOM XSS', 'CSRF, XXE & SSRF testing', 'SSL/TLS & security-header analysis', 'IDOR & directory-traversal checks', 'Multi-threaded scanning', 'HTML & JSON reporting'],
+                cmds: [['# Interactive mode', 'python rithoric.py'],
+                       ['# Direct scan of an authorized target', 'python rithoric.py --url https://your-app.com --report html']]
+            },
+            'api-scanner': {
+                icon: '🔌', name: 'API Scanner', lang: 'Python', status: 'active',
+                type: 'API Recon & Scanning',
+                github: 'https://github.com/anizum1/API_Scanner',
+                short: 'Discovers API endpoints and runs basic security analysis, exporting JSON / TXT / PDF reports.',
+                desc: 'API Scanner performs API endpoint discovery and basic security analysis on applications you own or are authorized to test. It probes common API paths, parses JavaScript for hidden endpoints, checks robots.txt / sitemaps, then reports findings and can save them as JSON, TXT or a formatted PDF (via ReportLab).',
+                arch: { input: 'Target website\nURL', engine: 'api_scanner.py — Discovery + Analysis',
+                    modules: ['Common API path probing', 'JavaScript endpoint parsing', 'robots.txt / sitemap discovery', 'Basic vulnerability checks', 'ReportLab report builder'],
+                    output: 'JSON / TXT / PDF\nreport', accent: '#00d9ff' },
+                install: ['pip install requests beautifulsoup4 reportlab', '(or) sudo apt install python3-requests python3-bs4 python3-reportlab', '(or) use a venv: python3 -m venv env && source env/bin/activate', 'Confirm authorization to scan the target', 'python3 api_scanner.py <url>'],
+                usage: ['Point the scanner at an authorized URL', 'It discovers endpoints (paths + JS + meta files)', 'Runs basic security analysis per endpoint', 'Collects findings', 'Export JSON / TXT / PDF as needed'],
+                feats: ['Common API path enumeration', 'JavaScript endpoint extraction', 'robots.txt & sitemap parsing', 'Authentication & rate-limit checks', 'Injection & input-validation tests', 'JSON, TXT and PDF reports', 'Custom User-Agent for authorized testing'],
+                cmds: [['# Basic scan, console output', 'python3 api_scanner.py https://yourwebsite.com'],
+                       ['# Save every format at once', 'python3 api_scanner.py https://yourwebsite.com -o report.json --txt report.txt --pdf report.pdf']]
+            },
+            'bluephone': {
+                icon: '📱', name: 'BluePhone', lang: 'Python', status: 'active',
+                type: 'Device Access (Educational)',
+                github: 'https://github.com/anizum1/BluePhone',
+                short: 'Educational tool demonstrating authorized remote interaction with your OWN Android/iOS devices.',
+                desc: 'BluePhone is an educational tool that demonstrates legitimate remote device-interaction methods for Android and iOS — for accessing YOUR OWN devices with proper authorization only. It auto-detects and installs the required tooling (ADB for Android, libimobiledevice for iOS) and wraps common device operations behind a guided CLI.',
+                arch: { input: 'Your own device\n(USB / authorized)', engine: 'BluePhone.py — Device Access Layer',
+                    modules: ['Dependency auto-install (ADB / libimobiledevice)', 'Android access (ADB)', 'iOS access (libimobiledevice)', 'Guided CLI operations'],
+                    output: 'Device info &\nauthorized actions', accent: '#00d9ff' },
+                install: ['git clone the BluePhone repo', 'python3 BluePhone.py (auto-installs ADB / libimobiledevice)', 'Enable USB debugging on your own device', 'Authorize the connection on the device', 'Follow the guided CLI menu'],
+                usage: ['Connect your own, authorized device', 'Tool checks & installs ADB / libimobiledevice', 'Select Android or iOS workflow', 'Run the guided operation', 'Review output in the terminal'],
+                feats: ['Android support via ADB', 'iOS support via libimobiledevice', 'Automatic dependency installation', 'Guided, menu-driven CLI', 'Clear error handling', 'Ethics-first: your own devices only'],
+                note: 'Strictly for accessing devices you own or are explicitly authorized to access.',
+                cmds: [['# Launch the guided tool (auto-installs deps)', 'python3 BluePhone.py']]
+            },
+            'sihmasi': {
+                icon: '🖼️', name: 'Sihmasi', lang: 'Python', status: 'active',
+                type: 'Metadata Forensics',
+                github: 'https://github.com/anizum1/Sihmasi',
+                short: 'Extracts metadata (incl. GPS) from images and videos using ExifTool, with optional report saving.',
+                desc: 'Sihmasi is an OSINT / forensics tool that extracts metadata from images and videos. It wraps ExifTool with an enhanced GPS-detection layer that surfaces all GPS-related fields, computes file hashes for integrity, and can save the results to disk for evidence handling.',
+                arch: { input: 'Image / video\nfile', engine: 'sihmasi.py — Metadata Extractor',
+                    modules: ['ExifTool invocation', 'Enhanced GPS field detection', 'Hash / integrity calc', 'Formatted output', 'Optional save-to-file'],
+                    output: 'Metadata report\n(+ GPS, hashes)', accent: '#00ff41' },
+                install: ['sudo apt-get update', 'sudo apt-get install libimage-exiftool-perl', 'chmod +x sihmasi.py', 'python3 sihmasi.py <file>'],
+                usage: ['Pass an image or video path', 'ExifTool extracts all metadata', 'GPS layer highlights location fields', 'File hash computed for integrity', 'Add --save / -s to write the report'],
+                feats: ['Image & video metadata extraction', 'Enhanced GPS / geolocation detection', 'File hashing for integrity', 'Color-coded terminal output', 'Save results to file (--save)', 'Built on industry-standard ExifTool'],
+                cmds: [['# Extract metadata from an image', 'python3 sihmasi.py image.jpg'],
+                       ['# Analyse a video and save the report', 'python3 sihmasi.py video.mp4 --save']]
+            },
+            'shafinnachora': {
+                icon: '📧', name: 'ShafinnaChora', lang: 'Python', status: 'proto',
+                type: 'Email Attachment Extraction',
+                github: 'https://github.com/anizum1/ShafinnaChora',
+                short: 'Planned tool to extract and analyse data from files delivered over email.',
+                desc: 'ShafinnaChora is intended as a tool to extract data from files that were sent over email — parsing messages, pulling attachments, and surfacing embedded data for analysis. The repository currently holds an early prototype while the extraction pipeline is being built out.',
+                arch: { input: 'Email message\n(+ attachments)', engine: 'ShafinnaChora — Extraction Pipeline (planned)',
+                    modules: ['Email / MIME parsing', 'Attachment extraction', 'Embedded data analysis', 'Result formatting'],
+                    output: 'Extracted data\n& summary', accent: '#ffd54f' },
+                install: ['git clone the ShafinnaChora repo', 'Install Python 3 dependencies', 'Run the script against a saved email / attachment'],
+                usage: ['Provide an email file or attachment', 'Pipeline parses the message', 'Attachments & embedded data extracted', 'Results summarized for review'],
+                feats: ['Email / MIME parsing (planned)', 'Attachment extraction (planned)', 'Embedded-data surfacing (planned)', 'Analysis-ready output (planned)'],
+                note: 'In development — the repo currently contains an early prototype; the email-extraction pipeline is being built.',
+                cmds: [['# Planned usage', 'python3 shafinnachora.py <email-or-attachment>']]
+            },
+            'masspassgen': {
+                icon: '🔑', name: 'MassPassGen', lang: 'Python', status: 'active',
+                type: 'Password Generation',
+                github: 'https://github.com/anizum1/MassPassGen',
+                short: 'Generates large quantities of unique passwords (6–12 chars) for security testing, saved to .txt.',
+                desc: 'MassPassGen is a mass password generator that produces large quantities of unique passwords 6–12 characters long, drawing from letters, digits and punctuation. It supports random and pattern-based generation and can save the output as a .txt wordlist for authorized security testing.',
+                arch: { input: 'Count, length\n& charset options', engine: 'masspassgen.py — Generator',
+                    modules: ['Random generation', 'Pattern-based generation', 'Uniqueness (set) enforcement', 'Progress reporting', 'File writer (.txt)'],
+                    output: '.txt wordlist\nof unique passwords', accent: '#00ff41' },
+                install: ['git clone the MassPassGen repo', 'cd MassPassGen', 'python3 masspassgen.py --help', '(no external dependencies)'],
+                usage: ['Choose how many passwords + length', 'Generator draws from the charset', 'Duplicates filtered via a set', 'Progress printed for large runs', 'Save the wordlist to a .txt file'],
+                feats: ['Random password generation (6–12 chars)', 'Pattern-based generation', 'Guaranteed-unique output', 'Configurable length & charset', 'Progress reporting for big batches', 'Save to .txt wordlist'],
+                cmds: [['# Generate a batch of unique passwords', 'python3 masspassgen.py --count 1000'],
+                       ['# Save the output as a wordlist', 'python3 masspassgen.py --count 5000 -o wordlist.txt']]
+            },
+
+            /* ---------- Labs & Infrastructure (from resume) ---------- */
+            'home-lab': {
+                icon: '🖥️', name: 'Home Lab Server Build', lang: 'Infrastructure', status: 'active',
+                type: 'Infrastructure',
+                short: 'Assembled & deployed 3+ physical servers with Windows Server / Active Directory.',
+                desc: 'Assembled and deployed 3+ physical servers for personal and family use, delivering stable multi-service uptime. Work covered hardware assembly, network cabling, firmware updates and Windows Server / Active Directory installation and configuration.',
+                arch: { input: 'Bare-metal\nhardware', engine: 'Home Lab — Build & Deploy',
+                    modules: ['Physical assembly & cabling', 'Firmware / BIOS updates', 'Windows Server install', 'Active Directory & DNS', 'Service hosting'],
+                    output: 'Stable multi-service\nlab environment', accent: '#00d9ff' },
+                install: ['Assemble server hardware & cabling', 'Update firmware / BIOS', 'Install Windows Server', 'Promote to Domain Controller (AD DS)', 'Deploy services & verify uptime'],
+                usage: ['Provision users & groups in Active Directory', 'Host services (files, DNS, apps)', 'Monitor uptime & health', 'Apply updates & backups', 'Troubleshoot hardware / network as needed'],
+                feats: ['3+ physical servers deployed', 'Hardware assembly & cabling', 'Firmware / BIOS management', 'Windows Server administration', 'Active Directory & DNS', 'Stable multi-service uptime']
+            },
+            'siem-lab': {
+                icon: '📡', name: 'Network IDS / SIEM Lab', lang: 'Blue Team', status: 'active',
+                type: 'Detection & Monitoring',
+                short: 'Full monitoring stack: Security Onion, Snort, Wazuh & Splunk with VLAN segmentation.',
+                desc: 'Built a full network-monitoring environment for real-time event correlation and investigation, combining Security Onion, Snort, Wazuh and Splunk. Included switch and VLAN configuration to segment and mirror traffic into the sensors for detection and analysis.',
+                arch: { input: 'Mirrored network\ntraffic + endpoint logs', engine: 'SIEM / IDS Lab — Detection Pipeline',
+                    modules: ['VLAN segmentation & SPAN', 'Snort IDS signatures', 'Security Onion sensor', 'Wazuh agents (endpoints)', 'Splunk correlation & dashboards'],
+                    output: 'Alerts, correlation\n& investigation', accent: '#ff5555' },
+                install: ['Configure switch VLANs + SPAN/mirror port', 'Deploy Security Onion sensor', 'Enable Snort rule sets', 'Install Wazuh agents on endpoints', 'Forward events into Splunk'],
+                usage: ['Traffic mirrored into the sensor', 'Snort / Security Onion raise IDS alerts', 'Wazuh ships endpoint telemetry', 'Splunk correlates events', 'Analyst investigates & triages'],
+                feats: ['Security Onion sensor deployment', 'Snort IDS signatures', 'Wazuh endpoint monitoring', 'Splunk correlation & dashboards', 'VLAN segmentation & SPAN', 'Real-time event correlation']
+            },
+            'cloud-hardening': {
+                icon: '☁️', name: 'Cloud Security Hardening', lang: 'Cloud Sec', status: 'active',
+                type: 'Cloud Security',
+                short: 'Secured AWS/Azure workloads with IAM, MFA and CIS benchmark validation.',
+                desc: 'Secured AWS and Azure workloads by designing IAM / access-control policies, enforcing MFA, and validating configurations against CIS benchmarks — reducing the attack surface and bringing cloud environments into a known-good, compliant baseline.',
+                arch: { input: 'AWS / Azure\nworkloads', engine: 'Cloud Hardening — Controls',
+                    modules: ['IAM & least-privilege policies', 'MFA enforcement', 'CIS benchmark validation', 'Config remediation', 'Continuous review'],
+                    output: 'Hardened, compliant\ncloud baseline', accent: '#00d9ff' },
+                install: ['Inventory AWS / Azure resources', 'Define IAM roles & least-privilege policies', 'Enforce MFA on all accounts', 'Run CIS benchmark assessment', 'Remediate findings & document'],
+                usage: ['Apply access-control policies', 'Require MFA for console & API', 'Scan against CIS benchmarks', 'Remediate misconfigurations', 'Re-validate & track compliance'],
+                feats: ['IAM / access-control design', 'MFA enforcement', 'CIS benchmark validation', 'AWS & Azure coverage', 'Attack-surface reduction', 'Compliance documentation']
+            },
+            'forensics': {
+                icon: '🔬', name: 'Digital Forensics Investigation', lang: 'DFIR', status: 'active',
+                type: 'Digital Forensics',
+                short: 'Reconstructed an incident timeline with FTK Imager, Autopsy and ExifTool.',
+                desc: 'Reconstructed a full incident timeline and identified indicators of compromise (IOCs) by performing disk imaging with FTK Imager, artifact analysis in Autopsy, and metadata extraction with ExifTool — producing a defensible, evidence-backed narrative of the incident.',
+                arch: { input: 'Seized disk /\nevidence media', engine: 'DFIR — Investigation Workflow',
+                    modules: ['Disk imaging (FTK Imager)', 'Artifact analysis (Autopsy)', 'Metadata extraction (ExifTool)', 'IOC identification', 'Timeline reconstruction'],
+                    output: 'Incident timeline\n+ IOC report', accent: '#c3a6ff' },
+                install: ['Install FTK Imager, Autopsy & ExifTool', 'Prepare a write-blocked evidence source', 'Create a forensic disk image', 'Load the image into Autopsy', 'Extract metadata with ExifTool'],
+                usage: ['Image the evidence media (hash-verified)', 'Parse artifacts in Autopsy', 'Extract file metadata with ExifTool', 'Identify IOCs', 'Reconstruct & document the timeline'],
+                feats: ['Forensically sound disk imaging', 'Autopsy artifact analysis', 'ExifTool metadata extraction', 'IOC identification', 'Full timeline reconstruction', 'Defensible evidence handling']
+            },
+            'pentest-lab': {
+                icon: '⚔️', name: 'Penetration Testing Lab', lang: 'Red Team', status: 'active',
+                type: 'Offensive Security',
+                short: 'Full-scope assessments with Nmap, Hydra, Burp Suite & Metasploit → CVSS-scored findings.',
+                desc: 'Delivered stakeholder-ready, CVSS-scored findings by running full-scope security assessments in a controlled lab. Combined reconnaissance (Nmap), credential attacks (Hydra), web testing (Burp Suite) and exploitation (Metasploit) into a repeatable methodology with clear reporting.',
+                arch: { input: 'Authorized scope\n/ target', engine: 'Pentest Lab — Kill-Chain Workflow',
+                    modules: ['Recon & scanning (Nmap)', 'Credential attacks (Hydra)', 'Web testing (Burp Suite)', 'Exploitation (Metasploit)', 'CVSS scoring & reporting'],
+                    output: 'CVSS-scored findings\n+ exec report', accent: '#ff5555' },
+                install: ['Use Kali Linux (tools pre-installed)', 'Confirm written authorization & scope', 'Set up an isolated lab network', 'Stand up target VMs', 'Begin the assessment'],
+                usage: ['Scan & enumerate with Nmap', 'Test credentials with Hydra', 'Probe web apps with Burp Suite', 'Exploit safely with Metasploit', 'Score with CVSS & report to stakeholders'],
+                feats: ['Reconnaissance with Nmap', 'Credential attacks with Hydra', 'Web testing with Burp Suite', 'Exploitation with Metasploit', 'CVSS-scored risk reporting', 'Stakeholder-ready deliverables']
+            },
+            'automation': {
+                icon: '⚙️', name: 'Automation & Scripting', lang: 'Python / Bash', status: 'active',
+                type: 'Automation',
+                short: 'Python/Bash pipelines for log analysis, health checks and scheduled reporting.',
+                desc: 'Built Python and Bash pipelines that run in a Linux command-line environment for log analysis, system health checks and scheduled reporting — cutting manual effort and mean incident-response time by automating monitoring, alerting and case documentation.',
+                arch: { input: 'Logs, systems\n& schedules', engine: 'Automation — Python / Bash Pipelines',
+                    modules: ['Log parsing & analysis', 'System health checks', 'Alerting hooks', 'Scheduled jobs (cron)', 'Report generation'],
+                    output: 'Alerts & scheduled\nreports', accent: '#00ff41' },
+                install: ['Clone the scripts into your environment', 'Ensure Python 3 & Bash are available', 'Configure targets / thresholds', 'Schedule via cron', 'Verify output & alerting'],
+                usage: ['Scripts parse logs & metrics', 'Health checks run on schedule', 'Anomalies trigger alerts', 'Reports generated automatically', 'Findings documented for review'],
+                feats: ['Automated log analysis', 'System health checks', 'Alerting & notification hooks', 'Scheduled (cron) execution', 'Automated report generation', 'Reduced manual toil & MTTR']
+            },
+
+            /* ---------- Web Development ---------- */
+            'technauf': {
+                icon: '🏢', name: 'Technauf IT Solutions', lang: 'HTML / CSS / JS', status: 'active',
+                type: 'Business Website',
+                github: 'https://github.com/anizum1/TechnaufITV2.0',
+                short: 'Business website for Technauf Cloud & Managed IT Services (latest v2.0 build).',
+                desc: 'Front-end website for Technauf Cloud and Managed IT Service — the managed-IT provider I work with. Built and iterated across several versions (this is the v2.0 build) using HTML, CSS and JavaScript, with a responsive layout presenting services, contact and company information.',
+                arch: { input: 'Visitor', engine: 'Technauf v2.0 — Static Front-End',
+                    modules: ['Responsive HTML/CSS layout', 'Service & about sections', 'JavaScript interactions', 'Contact call-to-action'],
+                    output: 'Deployed marketing\nsite', accent: '#00d9ff' },
+                install: ['git clone the TechnaufITV2.0 repo', 'Open index.html locally, or', 'Serve with any static host / GitHub Pages'],
+                usage: ['Visitor lands on the homepage', 'Browses services & company info', 'Responsive layout adapts to device', 'Uses the contact call-to-action'],
+                feats: ['Responsive multi-section layout', 'Services & about pages', 'JavaScript-driven interactions', 'Contact / lead call-to-action', 'Static — easy to host', 'Iterated across multiple versions']
+            },
+            'qiraan': {
+                icon: '🛒', name: 'Qiraan Shop', lang: 'HTML / CSS / JS', status: 'active',
+                type: 'E-commerce Front-End',
+                github: 'https://github.com/anizum1/qiraanAmboras1',
+                short: 'Demo e-commerce storefront for Qiraan Shop — product display and browsing UI.',
+                desc: 'A demo e-commerce storefront for Qiraan Shop, built with HTML, CSS and JavaScript. Presents products in a browsable catalog with a shopping-oriented UI, developed across several iterations of the design.',
+                arch: { input: 'Shopper', engine: 'Qiraan Shop — Storefront UI',
+                    modules: ['Product catalog / grid', 'Responsive styling', 'Browse & detail views', 'Cart-oriented UI'],
+                    output: 'Demo storefront\nexperience', accent: '#00ff41' },
+                install: ['git clone the qiraanAmboras1 repo', 'Open index.html locally, or', 'Serve via any static host / GitHub Pages'],
+                usage: ['Shopper opens the storefront', 'Browses the product catalog', 'Views product details', 'Interacts with the cart UI'],
+                feats: ['Product catalog / grid', 'Responsive storefront styling', 'Browse & detail views', 'Shopping-oriented UI', 'Static & easy to deploy', 'Iterated design versions']
+            },
+
+            /* ---------- Concepts (R&D) ---------- */
+            'blissfuss': {
+                icon: '🎭', name: 'BlissFuss', lang: 'Python', status: 'dev',
+                type: 'DeepFake / AI Detection',
+                github: 'https://github.com/anizum1/BlissFuss',
+                short: 'Concept: an app for detecting DeepFake and AI-generated content.',
+                desc: 'BlissFuss is a concept for an application that detects DeepFake and AI-generated content — images, video and audio — using machine-learning models to flag synthetic media with a confidence score. Currently in the idea / early-development stage.',
+                arch: { input: 'Image / video /\naudio', engine: 'BlissFuss — Detection Models (planned)',
+                    modules: ['Media pre-processing', 'DeepFake video model', 'AI-image classifier', 'Audio deepfake model', 'Confidence scoring'],
+                    output: 'Real vs. synthetic\n+ confidence', accent: '#c3a6ff' },
+                install: ['Planned: clone the repo', 'Planned: install ML dependencies', 'Planned: download / load models', 'Planned: run detection on a file'],
+                usage: ['Submit media for analysis', 'Models score each modality', 'Confidence aggregated', 'Verdict + forensic notes returned'],
+                feats: ['DeepFake video detection (planned)', 'AI-generated image ID (planned)', 'Audio deepfake detection (planned)', 'Confidence scoring (planned)', 'Batch processing (planned)'],
+                note: 'Concept / early development — architecture shown is the planned design.'
+            },
+            'cryptotrade': {
+                icon: '📈', name: 'CryptoTrade-AI', lang: 'AI / Trading', status: 'dev',
+                type: 'AI Trading Platform',
+                github: 'https://github.com/anizum1/CryptoTrade-AI',
+                short: 'Concept: a crypto trading platform driven by AI analysis.',
+                desc: 'CryptoTrade-AI is a concept for a cryptocurrency trading platform that uses AI analysis to inform trading decisions — ingesting market data, generating signals and surfacing them through a dashboard. Currently in the idea / early-development stage.',
+                arch: { input: 'Market data\nfeeds', engine: 'CryptoTrade-AI — Analysis Engine (planned)',
+                    modules: ['Market data ingestion', 'AI signal analysis', 'Strategy / risk rules', 'Dashboard & alerts'],
+                    output: 'Trade signals\n& insights', accent: '#c3a6ff' },
+                install: ['Planned: clone the repo', 'Planned: configure data / API keys', 'Planned: install dependencies', 'Planned: launch the dashboard'],
+                usage: ['Ingest live market data', 'AI models generate signals', 'Risk rules filter decisions', 'Signals shown on the dashboard'],
+                feats: ['Market data ingestion (planned)', 'AI-driven signal analysis (planned)', 'Strategy & risk rules (planned)', 'Dashboard & alerts (planned)'],
+                note: 'Concept / early development — architecture shown is the planned design.'
+            },
+            'final-project': {
+                icon: '🎓', name: 'Final Project', lang: 'TBD', status: 'dev',
+                type: 'Capstone (In Development)',
+                github: 'https://github.com/anizum1/Final-Project',
+                short: 'Capstone project repository — scope in progress.',
+                desc: 'A capstone / final project repository that is currently being scoped. As the direction firms up this entry will be expanded with its architecture, build steps and usage guide.',
+                arch: { input: 'Requirements\n& scope', engine: 'Final Project — TBD',
+                    modules: ['Scope & design', 'Implementation', 'Testing', 'Documentation'],
+                    output: 'Delivered capstone', accent: '#c3a6ff' },
+                install: ['To be documented as the project develops'],
+                usage: ['To be documented as the project develops'],
+                feats: ['Scope being defined', 'Architecture TBD', 'Build steps TBD'],
+                note: 'In development — details will be added as the project takes shape.'
+            },
+            'pong': {
+                icon: '🎮', name: 'Pong Game', lang: 'Python', status: 'dev',
+                type: 'Game (Test Project)',
+                github: 'https://github.com/anizum1/Pong-Game',
+                short: 'A small test Pong game.',
+                desc: 'A small test implementation of the classic Pong game — a lightweight practice project for game-loop, input handling and collision logic.',
+                arch: { input: 'Player input\n(paddles)', engine: 'Pong — Game Loop',
+                    modules: ['Input handling', 'Ball physics & collision', 'Score tracking', 'Render loop'],
+                    output: 'Playable\nPong match', accent: '#00ff41' },
+                install: ['git clone the Pong-Game repo', 'Ensure Python 3 (+ pygame if required)', 'Run the game script'],
+                usage: ['Launch the game', 'Control the paddles', 'Ball bounces & scores tracked', 'First to target score wins'],
+                feats: ['Classic Pong gameplay', 'Two-paddle input', 'Ball physics & collision', 'Score tracking'],
+                note: 'A small test / practice project.'
+            }
+        };
+
+        // ---- Diagram generators ----
+        function escXml(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+        function svgArch(spec){
+            const acc = spec.accent || '#00ff41';
+            const cyan = '#00d9ff';
+            const mods = spec.modules || [];
+            const n = mods.length;
+            const rowH = 34, rowGap = 10, engPad = 46;
+            const engineH = n*rowH + (n-1)*rowGap + engPad;
+            const H = Math.max(engineH + 40, 220);
+            const W = 720;
+            const cy = H/2;
+            const inW = 130, outW = 130;
+            const inX = 20, engX = 230, engW = 250, outX = W - outW - 20;
+
+            const lines = (txt, x, y, cls) => String(txt).split('\n').map((ln,i)=>
+                `<text x="${x}" y="${y + i*15}" text-anchor="middle" class="${cls}">${escXml(ln)}</text>`).join('');
+
+            let mrows = '';
+            const engInnerY = 34;
+            const engTop = (H-engineH)/2;
+            for (let i=0;i<n;i++){
+                const y = engTop + engInnerY + i*(rowH+rowGap);
+                mrows += `<rect x="${engX+14}" y="${y}" width="${engW-28}" height="${rowH}" rx="6"
+                    fill="rgba(0,255,65,0.06)" stroke="${acc}" stroke-opacity="0.45"/>
+                    <text x="${engX+engW/2}" y="${y+rowH/2+4}" text-anchor="middle" class="am">${escXml(mods[i])}</text>`;
+            }
+
+            return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img">
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="${cyan}"/>
+    </marker>
+    <style>
+      .an{ fill:#e6f0f6; font:600 12px monospace; }
+      .am{ fill:#cfe0ec; font:11px monospace; }
+      .al{ fill:${acc}; font:700 12px monospace; letter-spacing:.5px; }
+      .flow{ stroke:${cyan}; stroke-width:2; fill:none; marker-end:url(#arr); }
+    </style>
+  </defs>
+  <rect x="${inX}" y="${cy-42}" width="${inW}" height="84" rx="10" fill="rgba(0,217,255,0.08)" stroke="${cyan}" stroke-opacity="0.6"/>
+  <text x="${inX+inW/2}" y="${cy-50}" text-anchor="middle" class="al">INPUT</text>
+  ${lines(spec.input, inX+inW/2, cy-6, 'an')}
+  <path class="flow" d="M${inX+inW} ${cy} L${engX} ${cy}"/>
+  <rect x="${engX}" y="${engTop}" width="${engW}" height="${engineH}" rx="12" fill="rgba(10,20,45,0.7)" stroke="${acc}" stroke-opacity="0.7"/>
+  <text x="${engX+engW/2}" y="${engTop+22}" text-anchor="middle" class="al">${escXml(spec.engine||'Engine')}</text>
+  ${mrows}
+  <path class="flow" d="M${engX+engW} ${cy} L${outX} ${cy}"/>
+  <rect x="${outX}" y="${cy-42}" width="${outW}" height="84" rx="10" fill="rgba(0,255,65,0.08)" stroke="${acc}" stroke-opacity="0.7"/>
+  <text x="${outX+outW/2}" y="${cy-50}" text-anchor="middle" class="al">OUTPUT</text>
+  ${lines(spec.output, outX+outW/2, cy-6, 'an')}
+</svg>`;
+        }
+
+        // Self-contained numbered flowchart (no external dependency)
+        function mmBlock(steps){
+            return '<ol class="flow-steps">' + (steps||[]).map(s=>'<li>'+escXml(s)+'</li>').join('') + '</ol>';
+        }
+
+        function renderProjectDetail(id){
+            const p = projectData[id];
+            if (!p) return '';
+            const statusLabel = { active:'Active', proto:'Prototype', dev:'In Development' }[p.status] || p.status;
+            const cmds = (p.cmds||[]).map(pair =>
+                `<div><span class="c-comment">${escXml(pair[0])}</span><br><span class="c-cmd">$ ${escXml(pair[1])}</span></div>`).join('');
+            const gh = p.github ? `<a class="gh-link" href="${p.github}" target="_blank" rel="noopener">${p.github.replace('https://github.com/','github.com/')}</a>` : 'Local / lab project';
+            return `<div class="proj">
+                <div class="proj-header">
+                    <div class="proj-title">${p.icon} ${escXml(p.name)}</div>
+                    <div class="proj-badges">
+                        <span class="proj-tag">${escXml(p.type)}</span>
+                        <span class="proj-tag lang">${escXml(p.lang)}</span>
+                        <span class="proj-tag status-${p.status}">${statusLabel}</span>
+                    </div>
+                    <div style="font-size:.85rem;color:#7fd8e8;">🔗 ${gh}</div>
+                </div>
+                <p class="proj-desc-full">${escXml(p.desc)}</p>
+                ${p.note ? `<div class="proj-note">⚠️ ${escXml(p.note)}</div>` : ''}
+                <h3 class="proj-sec">🏗️ How It Works — Architecture</h3>
+                <div class="arch-wrap">${svgArch(p.arch)}</div>
+                <h3 class="proj-sec">⚙️ Installation</h3>
+                ${mmBlock(p.install)}
+                <h3 class="proj-sec">🚀 Step-by-Step Guide</h3>
+                ${mmBlock(p.usage)}
+                <h3 class="proj-sec">✨ Features</h3>
+                <ul class="proj-feats">${(p.feats||[]).map(f=>`<li>${escXml(f)}</li>`).join('')}</ul>
+                ${cmds ? `<h3 class="proj-sec">💻 Example Commands</h3><div class="proj-cmds">${cmds}</div>` : ''}
+            </div>`;
+        }
+
+        // ---- Navigation ----
+        window.openProjectCategory = function(catId){
+            const cat = projectCategories[catId];
+            if (!cat) return;
+            const win = document.getElementById('file-window');
+            const content = document.getElementById('file-window-content');
+            document.getElementById('file-window-icon').textContent = cat.icon;
+            document.getElementById('file-window-title').textContent = cat.title.replace('&amp;','&');
+
+            let cards = '';
+            cat.projects.forEach(pid => {
+                const p = projectData[pid];
+                if (!p) return;
+                const statusLabel = { active:'Active', proto:'Prototype', dev:'In Dev' }[p.status] || p.status;
+                cards += `<div class="proj-card" onclick="openProjectDetail('${catId}','${pid}')">
+                    <div class="proj-card-icon">${p.icon}</div>
+                    <div class="proj-card-name">${escXml(p.name)}</div>
+                    <div class="proj-card-desc">${escXml(p.short)}</div>
+                    <div class="proj-card-tags">
+                        <span class="proj-tag lang">${escXml(p.lang)}</span>
+                        <span class="proj-tag status-${p.status}">${statusLabel}</span>
+                    </div>
+                </div>`;
+            });
+
+            content.innerHTML = `<div class="proj-nav"><span class="proj-crumb">📁 Projects / ${cat.title.replace('&amp;','&')}</span></div>
+                <p class="proj-cat-intro">${cat.intro}</p>
+                <div class="proj-grid">${cards}</div>`;
+            win.classList.add('active');
+            openWindows.add('file-window');
+            addTaskBarItem('file-window', `${cat.icon} ${cat.title.replace('&amp;','&')}`);
+        };
+
+        window.openProjectDetail = function(catId, pid){
+            const content = document.getElementById('file-window-content');
+            const cat = projectCategories[catId];
+            const p = projectData[pid];
+            if (!p) return;
+            document.getElementById('file-window-title').textContent = p.name;
+            content.innerHTML = `<div class="proj-nav">
+                    <button class="proj-back" onclick="openProjectCategory('${catId}')">← Back</button>
+                    <span class="proj-crumb">📁 ${cat ? cat.title.replace('&amp;','&') : 'Projects'} / ${escXml(p.name)}</span>
+                </div>` + renderProjectDetail(pid);
+            content.scrollTop = 0;
+        };
+
     </script>
 </body>
 </html>
