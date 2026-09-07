@@ -3080,7 +3080,7 @@ Examples:
             'labs-infra': {
                 icon: '🖥️', title: 'Labs & Infrastructure',
                 intro: 'Hands-on lab builds and infrastructure projects from my cybersecurity work — home lab servers, a full SIEM/IDS monitoring stack, cloud hardening, digital forensics and automation pipelines.',
-                projects: ['home-lab', 'siem-lab', 'cloud-hardening', 'forensics', 'pentest-lab', 'automation']
+                projects: ['home-lab', 'siem-lab', 'cloud-hardening', 'forensics', 'pentest-lab', 'automation', 'n8n-automation']
             },
             'web-dev': {
                 icon: '🌐', title: 'Web Development',
@@ -3274,6 +3274,21 @@ Examples:
                 install: ['Clone the scripts into your environment', 'Ensure Python 3 & Bash are available', 'Configure targets / thresholds', 'Schedule via cron', 'Verify output & alerting'],
                 usage: ['Scripts parse logs & metrics', 'Health checks run on schedule', 'Anomalies trigger alerts', 'Reports generated automatically', 'Findings documented for review'],
                 feats: ['Automated log analysis', 'System health checks', 'Alerting & notification hooks', 'Scheduled (cron) execution', 'Automated report generation', 'Reduced manual toil & MTTR']
+            },
+            'n8n-automation': {
+                icon: '🔗', name: 'n8n Workflow Automation', lang: 'n8n / Low-code', status: 'active',
+                type: 'Workflow Automation',
+                short: 'Self-hosted n8n workflows connecting security & IT tools — alerts, tickets and reports on autopilot.',
+                desc: 'Built low-code automation workflows in a self-hosted n8n instance to connect security and IT tooling end to end. Triggers (webhooks, schedules, or SIEM alerts) feed node-based pipelines that filter and enrich data, then fan out to integrations — Slack/email notifications, ticket creation, and report generation — removing manual steps from incident response and IT operations while keeping data on infrastructure I control.',
+                arch: { input: 'Trigger\n(webhook / schedule\n/ SIEM alert)', engine: 'n8n — Workflow Engine',
+                    modules: ['Trigger nodes (webhook / cron / app event)', 'Filter & transform (IF / Function)', 'Enrichment (HTTP / API calls)', 'Integrations (Slack / Email / Jira)', 'Error handling & execution logs'],
+                    output: 'Automated actions,\nnotifications & logs', accent: '#ea4b71' },
+                install: ['Install Docker (or Node.js 18+)', 'Run n8n: docker run -p 5678:5678 -v n8n_data:/home/node/.n8n n8nio/n8n', 'Open the editor at http://localhost:5678', 'Create the owner account', 'Add credentials for your services (APIs, SMTP, Slack)'],
+                usage: ['Add a trigger node (webhook, cron, or app event)', 'Chain nodes to filter, transform & enrich the data', 'Connect integration nodes (Slack, email, Jira, HTTP)', 'Add IF / error branches for reliability', 'Test with sample data, then activate the workflow'],
+                feats: ['Low-code, node-based workflow builder', 'Webhook, schedule & app-event triggers', '400+ app integrations plus generic HTTP', 'Custom logic via Function nodes (JavaScript)', 'Self-hosted & data-private', 'Alert routing & automated ticket creation', 'Slack / email notifications', 'Error handling, retries & execution logs'],
+                note: 'Framed around security/IT-ops automation — tell me the specific workflows you built and I will tailor this card.',
+                cmds: [['# Run n8n via Docker (persistent data volume)', 'docker run -it --rm -p 5678:5678 -v n8n_data:/home/node/.n8n n8nio/n8n'],
+                       ['# Or run without installing, via Node.js', 'npx n8n']]
             },
 
             /* ---------- Web Development ---------- */
