@@ -3075,7 +3075,7 @@ Examples:
             'security-tools': {
                 icon: '🛡️', title: 'Security Tools',
                 intro: 'Offensive & defensive security tooling — OSINT, web pentesting, API scanning, forensics and more. Built in Python for authorized testing and research. Click any tool for its architecture, install flow and step-by-step guide.',
-                projects: ['mr-holmes', 'ri-thoric', 'api-scanner', 'bluephone', 'sihmasi', 'shafinnachora', 'masspassgen']
+                projects: ['tripline', 'mr-holmes', 'ri-thoric', 'api-scanner', 'bluephone', 'sihmasi', 'shafinnachora', 'masspassgen']
             },
             'labs-infra': {
                 icon: '🖥️', title: 'Labs & Infrastructure',
@@ -3095,6 +3095,22 @@ Examples:
         };
 
         const projectData = {
+            'tripline': {
+                icon: '🕵️', name: 'TripLine', lang: 'JavaScript / Static', status: 'active',
+                type: 'Secret Scanner (Web App)',
+                github: 'https://github.com/anizum1/TripLine',
+                live: 'https://anizum1.github.io/TripLine/#scan',
+                short: 'Browser-based GitHub secret scanner — finds hard-coded credentials across code, git history and binaries, redacted on detection.',
+                desc: 'TripLine is a static, no-backend web app that scans GitHub repositories for hard-coded credentials. It runs entirely in the browser and talks straight to GitHub, matching ~50 known credential formats plus a Shannon-entropy pass for unlabelled secrets. It scans the current tree, git history (a secret removed from HEAD but still in an older commit), and binaries via a strings-style ASCII + UTF-16LE extractor. Four views — Scan, Batch, Live and Dashboard — cover a single repo, a whole user/org, newly created public repos as they appear, and everything found. Every finding is redacted at the moment of detection (file, line, redacted form and a non-reversible fingerprint — never plaintext), and a scheduled GitHub Actions worker runs the same engine to keep the dashboard filling in.',
+                arch: { input: 'Repo / user\n(+ optional token)', engine: 'TripLine — Scan Engine (scanner.js / engine.js)',
+                    modules: ['Fetch files (raw.githubusercontent / API)', '~50 credential regex patterns', 'Shannon-entropy detection', 'Git-history + binary strings passes', 'Redact + fingerprint findings'],
+                    output: 'Redacted findings\n+ live dashboard', accent: '#ff5555' },
+                install: ['git clone the TripLine repo', 'Serve statically: python3 -m http.server 8000', 'Open http://localhost:8000', '(optional) node test/scanner.test.js', '(optional) enable Actions + TRIPLINE_TOKEN for the cron worker'],
+                usage: ['Open the Scan view', 'Enter a repo (owner/name); add a token for private repos / history', 'Toggle History and Deep (binaries) options', 'Run — the engine fetches & scans files', 'Review redacted findings in the auto-refreshing Dashboard'],
+                feats: ['Browser-based — no backend, no build step', '~50 known credential formats + entropy pass', 'Git-history scan (secrets removed from HEAD)', 'Binary strings extractor (ASCII + UTF-16LE)', 'Scan / Batch / Live / Dashboard views', 'Findings redacted at detection (never plaintext)', 'Scheduled GitHub Actions worker feeds data/', 'Live API rate-limit meter'],
+                cmds: [['# Serve the static site locally', 'python3 -m http.server 8000'],
+                       ['# Run the test suite (Node 18+, no dependencies)', 'node test/scanner.test.js && node test/engine.test.js']]
+            },
             'mr-holmes': {
                 icon: '🔍', name: 'Mr. Holmes', lang: 'Python', status: 'active',
                 type: 'OSINT Investigation',
@@ -3445,6 +3461,7 @@ Examples:
             const cmds = (p.cmds||[]).map(pair =>
                 `<div><span class="c-comment">${escXml(pair[0])}</span><br><span class="c-cmd">$ ${escXml(pair[1])}</span></div>`).join('');
             const gh = p.github ? `<a class="gh-link" href="${p.github}" target="_blank" rel="noopener">${p.github.replace('https://github.com/','github.com/')}</a>` : 'Local / lab project';
+            const live = p.live ? `<div style="font-size:.85rem;color:#7fd8e8;margin-top:.3rem;">🌐 <a class="gh-link" href="${p.live}" target="_blank" rel="noopener">Live Demo — ${escXml(p.live.replace('https://',''))}</a></div>` : '';
             return `<div class="proj">
                 <div class="proj-header">
                     <div class="proj-title">${p.icon} ${escXml(p.name)}</div>
@@ -3454,6 +3471,7 @@ Examples:
                         <span class="proj-tag status-${p.status}">${statusLabel}</span>
                     </div>
                     <div style="font-size:.85rem;color:#7fd8e8;">🔗 ${gh}</div>
+                    ${live}
                 </div>
                 <p class="proj-desc-full">${escXml(p.desc)}</p>
                 ${p.note ? `<div class="proj-note">⚠️ ${escXml(p.note)}</div>` : ''}
