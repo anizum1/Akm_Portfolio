@@ -2,7 +2,7 @@
 
 **Interactive Linux-style portfolio showcasing cybersecurity projects, CCNA labs, and professional presentations**
 
-🌐 **Live Demo:** [Your GitHub Pages URL]  
+🌐 **Live Demo:** https://anizum1.github.io/Akm_Portfolio/
 🔐 **Login Password:** `password`
 
 ---
